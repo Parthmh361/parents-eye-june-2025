@@ -1,13 +1,6 @@
 import { AppSidebar } from "@/components/app-sidebar";
 import { Navbar } from "@/components/navbar";
-import {
-  Breadcrumb,
-  BreadcrumbItem,
-  BreadcrumbLink,
-  BreadcrumbList,
-  BreadcrumbPage,
-  BreadcrumbSeparator,
-} from "@/components/ui/breadcrumb";
+import { Breadcrumb } from "@/components/ui/breadcrumb";
 import { Separator } from "@/components/ui/separator";
 import {
   SidebarInset,
@@ -15,7 +8,11 @@ import {
   SidebarTrigger,
 } from "@/components/ui/sidebar";
 
-export default function Layout() {
+export default function DashboardLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
   return (
     <SidebarProvider>
       <AppSidebar />
@@ -32,6 +29,7 @@ export default function Layout() {
             </Breadcrumb>
           </div>
         </header>
+        <main className="pt-16 pl-4 pr-4">{children}</main>
       </SidebarInset>
     </SidebarProvider>
   );

@@ -1,30 +1,41 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { useAuth } from "@/store/useAuth";
+import { useAuthStore } from "@/store/authStore";
 import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { loginUser } from "@/services/userService";
 
 export default function LoginPage() {
   const router = useRouter();
-  const { isAuthenticated, login } = useAuth();
-  const [email, setEmail] = useState("");
+  const { isAuthenticated, login } = useAuthStore();
+  const [username, setUser] = useState("");
   const [password, setPassword] = useState("");
 
   useEffect(() => {
     if (isAuthenticated) {
       router.replace("/dashboard");
     }
-  }, [isAuthenticated]);
+  }, [isAuthenticated, router]);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    // Replace this with real validation/auth
-    if (email && password) {
-      login();
-      router.push("/dashboard");
+
+    try {
+      const data = await loginUser(username, password); // 🟢 API call
+
+      if (data?.token) {
+        login(); // update Zustand store
+        document.cookie = `token=${data.token}; path=/`; // save token (optionally use HttpOnly cookies server-side)
+        router.push("/dashboard");
+      } else {
+        alert("Invalid response from server.");
+      }
+    } catch (error: any) {
+      console.error("Login error:", error);
+      alert("Login failed. Please check your credentials.");
     }
   };
 
@@ -43,8 +54,8 @@ export default function LoginPage() {
               <Input
                 type="text"
                 placeholder="Enter Your Username"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
+                value={username}
+                onChange={(e) => setUser(e.target.value)}
                 required
               />
             </div>
