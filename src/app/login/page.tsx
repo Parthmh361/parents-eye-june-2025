@@ -6,6 +6,8 @@ import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { loginUser } from "@/services/userService";
+import Image from "next/image";
 
 export default function LoginPage() {
   const router = useRouter();
@@ -19,19 +21,34 @@ export default function LoginPage() {
     }
   }, [isAuthenticated, router]);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    // Replace this with actual auth logic or call to userService
-    if (email && password) {
-      login(); // ✅ Set auth to true
-      document.cookie = `token=true; path=/`; // ✅ set a dummy token for middleware
-      router.push("/dashboard");
+    try {
+      const data = await loginUser(email, password); // 🟢 API call
+
+      if (data?.token) {
+        login(); // update Zustand store
+        document.cookie = `token=${data.token}; path=/`; // save token (optionally use HttpOnly cookies server-side)
+        router.push("/dashboard");
+      } else {
+        alert("Invalid response from server.");
+      }
+    } catch (error: any) {
+      console.error("Login error:", error);
+      alert("Login failed. Please check your credentials.");
     }
   };
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-gray-100">
+    <div className="relative flex items-center justify-center min-h-screen overflow-hidden">
+      <Image
+        src="/background.svg"
+        alt="Background"
+        fill
+        className="object-cover -z-10"
+        priority
+      />
       <Card className="w-full max-w-sm shadow-lg">
         <CardHeader>
           <CardTitle className="text-center text-xl">

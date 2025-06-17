@@ -5,7 +5,6 @@ const axiosInstance = axios.create({
   headers: {
     "Content-Type": "application/json",
   },
-  withCredentials: true, // If you're using cookies for auth
 });
 
 axiosInstance.interceptors.request.use(
