@@ -52,7 +52,7 @@ const components: { title: string; href: string; description: string }[] = [
   },
 ];
 
-export default function Navbar() {
+export function Navbar() {
   return (
     <NavigationMenu viewport={false}>
       <NavigationMenuList>
