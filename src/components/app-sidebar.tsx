@@ -13,6 +13,7 @@ import {
   SidebarMenuItem,
   SidebarRail,
 } from "@/components/ui/sidebar";
+import SearchComponent from "./ui/SearchComponent";
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   const activeSection = useNavigationStore((state) => state.activeSection);
@@ -79,7 +80,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         <SidebarMenu>
           <SidebarMenuItem>
             <SidebarMenuButton size="lg" asChild>
-              <a href="#">
+              {/* <a href="#">
                 <div className="bg-sidebar-primary text-sidebar-primary-foreground flex aspect-square size-8 items-center justify-center rounded-lg">
                   <GalleryVerticalEnd className="size-4" />
                 </div>
@@ -87,12 +88,15 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
                   <span className="font-medium">Documentation</span>
                   <span className="">v1.0.0</span>
                 </div>
-              </a>
+              </a> */}
+              {/* Search filter component start*/}
+              <SearchComponent data={getSidebarData()} displayKey={['title']} debounceDelay={500}/>
+              {/* Search filter component end */}
             </SidebarMenuButton>
           </SidebarMenuItem>
         </SidebarMenu>
       </SidebarHeader>
-      <SidebarContent>
+      {/* <SidebarContent>
         <SidebarGroup>
           <SidebarMenu>
             {sidebarItems.map((item) => (
@@ -104,7 +108,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
             ))}
           </SidebarMenu>
         </SidebarGroup>
-      </SidebarContent>
+      </SidebarContent> */}
       <SidebarRail />
     </Sidebar>
   );
