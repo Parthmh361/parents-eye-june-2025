@@ -10,6 +10,7 @@ import {
   NavigationMenuList,
   navigationMenuTriggerStyle,
 } from "@/components/ui/navigation-menu";
+import { LogoutButton } from "./logout-button";
 
 export function Navbar() {
   const setActiveSection = useNavigationStore(
@@ -23,12 +24,30 @@ export function Navbar() {
             <NavigationMenuLink
               asChild
               className={navigationMenuTriggerStyle()}
-              onClick={() => setActiveSection(section)}
+              onClick={() => {
+                if (section !== "Dashboard") {
+                  setActiveSection(section);
+                }
+              }}
             >
-              <Link href="/dashboard">{section}</Link>
+              <Link href={section === "Dashboard" ? "/dashboard" : "#"}>
+                {section}
+              </Link>
             </NavigationMenuLink>
           </NavigationMenuItem>
         ))}
+        <NavigationMenu>
+          <NavigationMenuList>
+            <NavigationMenuItem>
+              <NavigationMenuLink
+                asChild
+                className={navigationMenuTriggerStyle()}
+              >
+                <LogoutButton />
+              </NavigationMenuLink>
+            </NavigationMenuItem>
+          </NavigationMenuList>
+        </NavigationMenu>
       </NavigationMenuList>
     </NavigationMenu>
   );

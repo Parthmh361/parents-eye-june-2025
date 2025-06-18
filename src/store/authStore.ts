@@ -9,5 +9,9 @@ interface AuthState {
 export const useAuthStore = create<AuthState>((set) => ({
   isAuthenticated: false,
   login: () => set({ isAuthenticated: true }),
-  logout: () => set({ isAuthenticated: false }),
+  logout: () => {
+    // Clear token and update auth state
+    document.cookie = "token=; Max-Age=0; path=/"; // clear cookie
+    set({ isAuthenticated: false });
+  },
 }));
