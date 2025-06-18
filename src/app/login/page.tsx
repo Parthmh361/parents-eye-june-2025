@@ -56,7 +56,7 @@ export default function LoginPage() {
           </CardTitle>
         </CardHeader>
         <CardContent>
-          <form onSubmit={handleSubmit} className="space-y-4">
+          <form onSubmit={handleSubmit} className="space-y-4 mb-4">
             <div>
               <label className="block text-sm font-medium mb-1">Username</label>
               <Input
@@ -81,6 +81,12 @@ export default function LoginPage() {
               Login
             </Button>
           </form>
+          <div className="text-center">
+            <span className="text-xs text-muted-foreground">
+              By continuing, you agree to our <a href="">Terms</a> and{" "}
+              <a href="">Privacy Policy</a>.
+            </span>
+          </div>
         </CardContent>
       </Card>
     </div>
