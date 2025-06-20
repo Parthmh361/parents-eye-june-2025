@@ -14,8 +14,11 @@ export function LogoutButton() {
   };
 
   return (
-    <Button variant="outline" onClick={handleLogout} className="cursor-pointer">
-      Logout
-    </Button>
+    <button 
+  onClick={handleLogout} 
+  className="cursor-pointer bg-transparent text-black text-[120%] hover:bg-[#FFE58A] px-4 py-2 rounded-md transition-colors"
+>
+  Logout
+</button>
   );
 }

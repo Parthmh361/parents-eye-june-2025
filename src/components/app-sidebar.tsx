@@ -1,27 +1,30 @@
 "use client";
 
 import * as React from "react";
+import { GalleryVerticalEnd } from "lucide-react";
 import { useNavigationStore } from "@/store/navigationStore";
 import {
   Sidebar,
+  SidebarContent,
+  SidebarGroup,
   SidebarHeader,
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
   SidebarRail,
 } from "@/components/ui/sidebar";
-import SearchComponent from "./ui/SearchComponent";
+import SearchComponent from "./ui/filter-search/SearchComponent";
+
+type SidebarItem = { title: string; url: string };
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   const activeSection = useNavigationStore((state) => state.activeSection);
-  const getSidebarData = () => {
+
+  const getSidebarData = (): SidebarItem[] => {
     switch (activeSection) {
       case "School":
         return [
-          {
-            title: "Student Details",
-            url: "/dashboard/school/student-details",
-          },
+          { title: "Student Details", url: "/dashboard/school/students" },
           { title: "Geofence", url: "/dashboard/school/geofence" },
           { title: "Pickup And Drop", url: "/dashboard/school/pickup-drop" },
           { title: "Absent", url: "/dashboard/school/absent" },
@@ -68,43 +71,51 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
           },
         ];
       default:
-        return [
-          {
-            title: "Student Details",
-            url: "/dashboard/school/student-details",
-          },
-          { title: "Geofence", url: "/dashboard/school/geofence" },
-          { title: "Pickup And Drop", url: "/dashboard/school/pickup-drop" },
-          { title: "Absent", url: "/dashboard/school/absent" },
-          { title: "Present", url: "/dashboard/school/present" },
-          { title: "Leave Request", url: "/dashboard/school/leave-request" },
-          { title: "Status", url: "/dashboard/school/status" },
-          {
-            title: "Approved Request",
-            url: "/dashboard/school/approved-request",
-          },
-          { title: "Denied Request", url: "/dashboard/school/denied-request" },
-        ];
+        return [{ title: "", url: "#" }];
     }
   };
 
+  const sidebarItems: SidebarItem[] = getSidebarData();
+  const [filteredItems, setFilteredItems] = React.useState<SidebarItem[]>(sidebarItems);
+
+  React.useEffect(() => {
+    setFilteredItems(sidebarItems);
+  }, [activeSection]);
+
+  // Adapter to ensure correct type for onResults
+  const handleResults = (results: any[]) => {
+    setFilteredItems(results as SidebarItem[]);
+  };
+
   return (
-    <Sidebar {...props}>
-      <SidebarHeader>
+    <Sidebar {...props} className="z-50  relative">
+      <SidebarHeader  className="bg-primary">
         <SidebarMenu>
           <SidebarMenuItem>
-            <SidebarMenuButton size="lg" asChild>
-              {/* Search filter component start*/}
-              <SearchComponent
-                data={getSidebarData()}
-                displayKey={["title"]}
-                debounceDelay={500}
+                <SearchComponent
+                data={sidebarItems}
+                displayKey="title"
+                onResults={handleResults}
+                placeholder="Search menu..."
+                className="mt-8 "
               />
-              {/* Search filter component end */}
-            </SidebarMenuButton>
+
           </SidebarMenuItem>
         </SidebarMenu>
       </SidebarHeader>
+      <SidebarContent className="bg-primary text-2xl">
+        <SidebarGroup>
+          <SidebarMenu>
+            {filteredItems.map((item) => (
+              <SidebarMenuItem key={item.title}>
+                <SidebarMenuButton asChild>
+                  <a href={item.url}>{item.title}</a>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
+            ))}
+          </SidebarMenu>
+        </SidebarGroup>
+      </SidebarContent>
       <SidebarRail />
     </Sidebar>
   );
