@@ -6,6 +6,6 @@ type NavigationState = {
 };
 
 export const useNavigationStore = create<NavigationState>((set) => ({
-  activeSection: "Dashboard",
+  activeSection: "School", // Default active section
   setActiveSection: (section) => set({ activeSection: section }),
 }));
