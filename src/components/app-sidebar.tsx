@@ -107,11 +107,14 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         <SidebarGroup>
           <SidebarMenu>
             {filteredItems.map((item) => (
-              <SidebarMenuItem key={item.title}>
+              <SidebarMenuItem key={item.title} 
+              className="block w-full text-left px-4 py-2 rounded-md hover:bg-[#ffe58a] hover:text-black transition-colors duration-200"
+              >
                 <SidebarMenuButton asChild>
                   <a href={item.url}>{item.title}</a>
                 </SidebarMenuButton>
               </SidebarMenuItem>
+              
             ))}
           </SidebarMenu>
         </SidebarGroup>
